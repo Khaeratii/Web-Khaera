@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign in | Aira</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/auth.css" />
+  </head>
+  <body>
+    <main class="auth-shell">
+      <div class="auth-art">
+        <div class="brand">
+          <span class="brand-mark">a</span><span>Aira</span>
+        </div>
+        <div class="art-copy">
+          <span class="eyebrow">YOUR CONVERSATION PARTNER</span>
+          <h1>Find your English in the everyday.</h1>
+          <p>
+            Natural practice for people who want to sound like themselves, only
+            more confidently.
+          </p>
+        </div>
+        <div class="art-note">CONVERSE · NOTICE · GROW</div>
+      </div>
+      <section class="auth-panel">
+        <div class="auth-form">
+          <span class="eyebrow">WELCOME BACK</span>
+          <h2>Let’s pick up where you left off.</h2>
+          <p class="muted">Sign in to keep your practice going.</p>
+          <form id="auth-form">
+            <label
+              >Email<input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="you@example.com" /></label
+            ><label
+              >Password<input
+                type="password"
+                id="password"
+                name="password"
+                required
+                minlength="6"
+                placeholder="At least 6 characters" /></label
+            ><button class="primary-button" type="submit">
+              Enter Aira <span>→</span>
+            </button>
+            <p id="auth-error" class="error"></p>
+          </form>
+          <p class="switch-auth">
+            New here? <a href="/signup.html">Create an account</a>
+          </p>
+        </div>
+      </section>
+    </main>
+    <script src="/js/auth.js?v=2"></script>
+  </body>
+</html>

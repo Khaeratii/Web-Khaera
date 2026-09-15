@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Aira | Conversational English Tutor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <span class="brand-mark">a</span><span>Aira</span>
+        </div>
+        <div class="sidebar-user">
+          <div class="avatar" id="user-avatar">A</div>
+          <div>
+            <strong id="user-name">Learner</strong
+            ><span id="user-level">A2 · Elementary</span>
+          </div>
+        </div>
+        <button class="new-session" id="new-session">
+          <span>+</span> New practice
+        </button>
+        <div class="side-label">Recent sessions</div>
+        <nav id="conversation-list" class="conversation-list"></nav>
+        <div class="sidebar-bottom">
+          <button class="side-link active" data-view="chat">
+            <span>◌</span> Practice</button
+          ><button class="side-link" data-view="stats">
+            <span>◒</span> My progress</button
+          ><button class="side-link" id="logout">
+            <span>↗</span> Sign out
+          </button>
+        </div>
+      </aside>
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <span class="eyebrow">CONVERSATIONAL ENGLISH</span>
+            <h1 id="page-title">Good morning, learner.</h1>
+          </div>
+          <div class="top-actions">
+            <span class="status-dot">Aira is ready</span
+            ><button
+              class="icon-button"
+              id="review-button"
+              title="Review this session"
+            >
+              ✦
+            </button>
+          </div>
+        </header>
+        <section id="chat-view" class="view active-view">
+          <div class="conversation-header">
+            <div>
+              <h2 id="conversation-title">A fresh conversation</h2>
+              <p>Speak naturally. I'll help you notice the small things.</p>
+            </div>
+            <span class="topic-chip">Everyday English</span>
+          </div>
+          <div id="message-list" class="message-list">
+            <div class="welcome-card">
+              <div class="welcome-orbit">a</div>
+              <div>
+                <span class="eyebrow">YOUR ENGLISH, YOUR PACE</span>
+                <h2>What’s on your mind today?</h2>
+                <p>
+                  Tell me about your day, a plan, or something you’re curious
+                  about. There’s no perfect answer here.
+                </p>
+              </div>
+            </div>
+          </div>
+          <form id="chat-form" class="composer">
+            <textarea
+              id="message-input"
+              rows="1"
+              placeholder="Write what you’d say out loud..."
+              autocomplete="off"
+            ></textarea>
+            <div class="composer-actions">
+              <span id="char-count">0 / 500</span
+              ><button
+                type="button"
+                class="voice-button"
+                id="voice-button"
+                title="Voice input"
+              >
+                ◉</button
+              ><button type="submit" class="send-button" title="Send message">
+                →
+              </button>
+            </div>
+          </form>
+          <p class="composer-note">
+            Aira focuses on fluency first, perfection later.
+          </p>
+        </section>
+        <section id="stats-view" class="view">
+          <div class="stats-heading">
+            <div>
+              <span class="eyebrow">YOUR PROGRESS</span>
+              <h2>Small steps, real patterns.</h2>
+              <p>Built from your actual conversations, never guesswork.</p>
+            </div>
+            <button class="outline-button" id="refresh-stats">
+              Refresh data
+            </button>
+          </div>
+          <div class="stats-grid">
+            <article class="level-card">
+              <span class="eyebrow">CURRENT LEVEL</span
+              ><strong id="stat-level">A2</strong
+              ><span id="stat-level-label">Elementary</span>
+              <div class="level-track"><i id="level-progress"></i></div>
+              <small>Keep showing up to move forward.</small>
+            </article>
+            <article class="metric-card">
+              <span class="eyebrow">WORDS SPOKEN</span
+              ><strong id="stat-words">0</strong
+              ><span>across your sessions</span>
+            </article>
+            <article class="metric-card">
+              <span class="eyebrow">PRACTICE TURNS</span
+              ><strong id="stat-turns">0</strong
+              ><span>your ideas in English</span>
+            </article>
+          </div>
+          <div class="progress-layout">
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <span class="eyebrow">SKILL BREAKDOWN</span>
+                  <h3>What’s growing</h3>
+                </div>
+              </div>
+              <div id="skill-list" class="skill-list"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <span class="eyebrow">LEARNER PATTERNS</span>
+                  <h3>Worth noticing</h3>
+                </div>
+              </div>
+              <div id="pattern-list" class="pattern-list">
+                <p class="empty-state">
+                  Your patterns will appear after you practice.
+                </p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+    </div>
+    <div id="review-modal" class="modal hidden">
+      <div class="modal-card">
+        <button class="modal-close" id="close-modal">×</button>
+        <div class="eyebrow">SESSION REVIEW</div>
+        <div id="review-content" class="review-content"></div>
+      </div>
+    </div>
+    <script src="/js/app.js?v=4"></script>
+  </body>
+</html>
