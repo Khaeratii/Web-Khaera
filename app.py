@@ -13,10 +13,22 @@ from flask import Flask, jsonify, request, send_from_directory, session
 from flask_cors import CORS
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from config import AIRA_SYSTEM_PROMPT, DATABASE_PATH, DEEPSEEK_API_KEY, DEEPSEEK_API_URL, DEEPSEEK_MODEL, SECRET_KEY
+from config import AIRA_SYSTEM_PROMPT, DEEPSEEK_API_KEY, DEEPSEEK_API_URL, DEEPSEEK_MODEL, SECRET_KEY
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
-FRONTEND_DIR = ROOT_DIR / "frontend"
+# ============================================================
+# KONFIGURASI PATH (Vercel-friendly)
+# ============================================================
+BASE_DIR = Path(__file__).resolve().parent
+FRONTEND_DIR = BASE_DIR / "frontend"
+
+# Di Vercel, filesystem read-only kecuali /tmp
+# Pakai /tmp untuk SQLite supaya bisa ditulis
+IS_VERCEL = os.getenv("VERCEL") == "1"
+if IS_VERCEL:
+    DATABASE_PATH = "/tmp/users.db"
+else:
+    DATABASE_PATH = str(BASE_DIR / "users.db")
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = SECRET_KEY
 CORS(app, supports_credentials=True)
@@ -170,7 +182,7 @@ def demo_reply(history, content):
         return "That sounds like a busy part of your life. What are you studying right now?"
     if len(lower) <= 2:
         if previous_assistant_message:
-            return "I’m listening. Could you say that again in a full sentence?"
+            return "I'm listening. Could you say that again in a full sentence?"
         return "Could you say a little more?"
     if previous_user_message:
         return f"Got it, you're talking about '{content}'. What do you think about it?"
@@ -190,7 +202,7 @@ def generate_reply(history, content):
             response_data = json.loads(response.read().decode("utf-8"))
         reply = response_data.get("choices", [{}])[0].get("message", {}).get("content", "").strip()
         if not reply:
-            return "I’m here with you, but DeepSeek returned an empty response. Could you try that again?"
+            return "I'm here with you, but DeepSeek returned an empty response. Could you try that again?"
         return reply
     except urlerror.HTTPError as exc:
         if exc.code == 402:
@@ -206,12 +218,14 @@ def generate_reply(history, content):
         return "DeepSeek returned an error. Please check the DeepSeek service and try again."
     except (urlerror.URLError, TimeoutError, json.JSONDecodeError):
         logger.exception("DeepSeek request failed")
-        return "I’m having trouble reaching DeepSeek right now. Please try again in a moment."
+        return "I'm having trouble reaching DeepSeek right now. Please try again in a moment."
 
 
 @app.get("/")
 def index():
-    return send_from_directory(FRONTEND_DIR, "index.html")
+    if (FRONTEND_DIR / "index.html").exists():
+        return send_from_directory(FRONTEND_DIR, "index.html")
+    return jsonify({"status": "ok", "message": "Aira backend is running. Frontend not found."})
 
 
 @app.get("/api/status")
@@ -221,7 +235,9 @@ def status():
 
 @app.get("/<path:path>")
 def frontend_assets(path):
-    return send_from_directory(FRONTEND_DIR, path)
+    if (FRONTEND_DIR / path).exists():
+        return send_from_directory(FRONTEND_DIR, path)
+    return jsonify({"error": "Not found"}), 404
 
 
 @app.post("/api/auth/signup")
@@ -433,7 +449,12 @@ def tts():
     return jsonify({"error": "Text-to-speech is ready for integration; install gTTS and configure an audio response pipeline."}), 501
 
 
-init_db()
+# Init DB saat module di-load (penting untuk Vercel serverless)
+try:
+    init_db()
+except Exception as e:
+    logger.exception("Failed to initialize database: %s", e)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=int(os.getenv("PORT", "5000")))
